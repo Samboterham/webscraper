@@ -1,11 +1,14 @@
-const puppeteer = require("puppeteer");
+const assert = require("node:assert/strict");
+const { scrapeUrl } = require("./scrape");
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-
-  await page.goto("https://example.com");
-  console.log(await page.title());
-
-  await browser.close();
-})();
+  const result = await scrapeUrl("https://example.com");
+  assert.equal(result.title, "Example Domain");
+  assert.equal(typeof result.heading, "string");
+  assert.ok(Array.isArray(result.paragraphs));
+  assert.ok(Array.isArray(result.links));
+  console.log("Scraper test passed.");
+})().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
