@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f5f7fa;
+    color: #172033;
+    font: 16px/1.5 system-ui, sans-serif;
+}
+
+main {
+    width: min(100% - 2rem, 1000px);
+    margin: 3rem auto;
+}
+
+h1,
+h2 {
+    line-height: 1.2;
+}
+
+.scrape-form {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 680px;
+}
+
+.scrape-controls {
+    display: flex;
+    gap: 0.75rem;
+}
+
+input,
+button {
+    min-height: 2.75rem;
+    border: 1px solid #cbd2df;
+    border-radius: 0.5rem;
+    font: inherit;
+}
+
+input {
+    flex: 1;
+    min-width: 0;
+    padding: 0 0.75rem;
+    background: white;
+}
+
+button {
+    padding: 0 1rem;
+    background: #2459d3;
+    border-color: #2459d3;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1948b4;
+}
+
+#status {
+    min-height: 1.5rem;
+    color: #46536b;
+}
+
+.image-gallery {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.image-gallery figure {
+    width: 70%;
+    margin: 0;
+}
+
+.image-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+details {
+    margin-top: 2rem;
+}
+
+pre {
+    overflow: auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #172033;
+    color: #f5f7fa;
+}
+
+@media (max-width: 480px) {
+    .scrape-controls {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

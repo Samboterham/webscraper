@@ -7,6 +7,7 @@ const { scrapeUrl } = require("./scrape");
   assert.equal(typeof result.heading, "string");
   assert.ok(Array.isArray(result.paragraphs));
   assert.ok(Array.isArray(result.links));
+  assert.ok(Array.isArray(result.images));
   console.log("Scraper test passed.");
 })().catch(error => {
   console.error(error);

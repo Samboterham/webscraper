@@ -9,15 +9,35 @@
 </head> 
         
 <body>  
-    <input id="urlInput" placeholder="https://example.com">
-    <button id="scrapeButton">Scrape</button>
-    <pre id="result"></pre>
+    <main>
+        <h1>Web scraper</h1>
+        <div class="scrape-form">
+            <label for="urlInput">Website URL</label>
+            <div class="scrape-controls">
+                <input id="urlInput" type="url" placeholder="https://example.com">
+                <button id="scrapeButton">Scrape</button>
+            </div>
+        </div>
+        <p id="status" role="status" aria-live="polite"></p>
+        <section aria-labelledby="imagesHeading">
+            <h2 id="imagesHeading">Scraped images</h2>
+            <div id="images" class="image-gallery"></div>
+        </section>
+        <details>
+            <summary>Scraped data</summary>
+            <pre id="result"></pre>
+        </details>
+    </main>
 </body> 
 <script>
     document.querySelector("#scrapeButton").addEventListener("click", async () => {
         const url = document.querySelector("#urlInput").value;
         const result = document.querySelector("#result");
-        result.textContent = "Loading...";
+        const status = document.querySelector("#status");
+        const images = document.querySelector("#images");
+        result.textContent = "";
+        images.replaceChildren();
+        status.textContent = "Scraping...";
 
         try {
             const response = await fetch(`/scrape?url=${encodeURIComponent(url)}`);
@@ -27,9 +47,32 @@
                 throw new Error(data.error || "The request failed.");
             }
 
+            if (!Array.isArray(data.images)) {
+                throw new Error("The scraper server did not return image data. Restart it with `npm start` and try again.");
+            }
+
+            const scrapedImages = data.images;
             result.textContent = JSON.stringify(data, null, 2);
+            if (scrapedImages.length === 0) {
+                images.textContent = "No images found on this page.";
+            } else {
+                for (const image of scrapedImages) {
+                    const card = document.createElement("figure");
+                    const preview = document.createElement("img");
+                    preview.src = image.src;
+                    preview.alt = image.alt || "Image scraped from the page";
+                    preview.loading = "lazy";
+                    preview.addEventListener("error", () => {
+                        preview.alt = "Could not load image";
+                    });
+
+                    card.append(preview);
+                    images.append(card);
+                }
+            }
+            status.textContent = `Found ${scrapedImages.length} image${scrapedImages.length === 1 ? "" : "s"}.`;
         } catch (error) {
-            result.textContent = error.message;
+            status.textContent = error.message;
         }
     }); 
 </script>
